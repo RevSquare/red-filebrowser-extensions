@@ -1,4 +1,5 @@
 {% load i18n fb_versions fb_tags %}
+
 <input id="{{ final_attrs.id }}" type="text" class="vFileBrowseField{% if final_attrs.class %} {{ final_attrs.class }}{% endif %}" name="{{ final_attrs.name }}" value="{{ value.path }}" /><a href="javascript:FileBrowser.show('{{ final_attrs.id }}', '{{ url }}?pop=1{% if final_attrs.directory %}&amp;dir={{ final_attrs.directory|urlencode|urlencode }}{% endif %}{% if final_attrs.format %}&amp;type={{ final_attrs.format }}{% endif %}');" class="fb_show"></a>
 {% if value.filetype == "Image" and value.exists %}
 {% version_object value.path final_attrs.ADMIN_THUMBNAIL as thumbnail_version %}
@@ -9,7 +10,7 @@
     </a>
 </p>
 <p>
-    <a href="javascript:FileBrowser.show('{{ final_attrs.id }}', '{% url 'filebrowser:fb_crop' %}?pop=1&amp;dir={{ value.dirname|urlencode }}&amp;filename={{ value.filename|urlencode }}')" style="font-size: 14px; text-decoration: none;">
+    <a href="javascript:FileBrowser.show('{{ final_attrs.id }}', '{% url 'filebrowser:fb_crop' %}?pop=1&amp;dir={{ value.dirname|urlencode }}&amp;filename={{ value.filename|urlencode }}&amp;fieldname={{ final_attrs.name|urlencode }}')" style="font-size: 14px; text-decoration: none;">
         <strong>{% trans "Crop" %}</strong>
     </a>
 </p>

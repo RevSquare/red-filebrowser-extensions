@@ -67,6 +67,9 @@
             <div id='_form' style='display:hidden'>
                 {% csrf_token %}
                 {{ form }}
+                {% if model %}
+                    <input type="hidden" name="model" value="{{ model }}">
+                {% endif %}
             </div>
              <div id="submit" class="module footer">
                 <ul class="submit-row" style='border-top: 0'>

@@ -107,11 +107,31 @@ class CropFileBrowserSite(sites.FileBrowserSite):
         "Only let staff browse the files"
         return staff_member_required(never_cache(view))
 
+    def filter_versions(self, request, versions, model):
+        """
+        Filter the list of preset available according to values passed in
+        settings.FILEBROWSER_VERSIONS
+        """
+        filtered_versions = []
+        fieldname = request.GET.get('fieldname', '').split('-')[0]
+        for version in settings.FILEBROWSER_VERSIONS:
+            value = settings.FILEBROWSER_VERSIONS[version]
+            if ('filter_model' not in value or
+                    model in value['filter_model'])\
+                    and version in versions and\
+                    (not fieldname or
+                        (fieldname and
+                            ('filter_field' not in value
+                             or fieldname in value['filter_field']))):
+                filtered_versions.append(version)
+        return sorted(filtered_versions, key=str.lower)
+
     def crop(self, request):
         """
         Crop view.
         """
         query = request.GET
+        model = ''
         if not query.get('filename'):
             raise Http404
 
@@ -130,16 +150,28 @@ class CropFileBrowserSite(sites.FileBrowserSite):
         if request.POST:
             version = request.POST.get('version')
             form = ImageCropDataForm(request.POST)
+            model = request.POST.get('model', '')
             if form.is_valid():
                 if version in versions:
                    self._save_crop(fileobject.path, **form.cleaned_data)
                 qs = request.GET.copy()
                 qs['version'] = version
                 path = '%s?%s' % (request.path, qs.urlencode())
+                if model:
+                    path = path + '&model=' + model
                 return HttpResponseRedirect(path)
         else:
+            model = request.GET.get('model', '')
+            if not model:
+                args = request.META.get('HTTP_REFERER').split('/')
+                if not args[-1]:
+                    del args[-1]
+                if int(args[-1]) > 0:
+                    model = args[-2]
+                else:
+                    model = args[-1]
+            versions = self.filter_versions(request, versions, model)
             form = ImageCropDataForm(initial={'version' : version})
-
         return render_to_response('cropper/crop.html', {
             'fileobject': fileobject,
             'query': query,
@@ -148,6 +180,7 @@ class CropFileBrowserSite(sites.FileBrowserSite):
             'breadcrumbs_title': u'%s' % fileobject.filename,
             'settings_var': fb_settings,
             'filebrowser_site': self,
+            'model': model,
             'form' : form,
             'editable_versions' : versions,
             'version' : version
