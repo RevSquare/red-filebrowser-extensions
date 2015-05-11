@@ -85,10 +85,12 @@ An exemple might be more helpful!
 
 {% load static thumbnail crop_filebrowser %}
 
-{% version_object_thumbnail news.image 'news_homepage' as object_image %}  
+{% version_object_thumbnail news.image 'news_detail' as object_image %}  
 {% thumbnail object_image object_image.version_dimensions crop="center" as im %}
     <img src="{{ im.url }}" alt="{{ news.title }}">
 {% endthumbnail %}
+
+This way, the editors dont have to originaly crop all images before they appear at the right dimensions, and you can directly manage them from the settings.
 
 Lantip Notes
 ------------
