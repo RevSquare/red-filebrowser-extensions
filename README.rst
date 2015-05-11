@@ -26,6 +26,8 @@ python setup.py install
 
 Open settings.py and add crop_filebrowser to your INSTALLED_APPS if you want access to the filebrowser management commands you should include it as well:
 
+.. code-block::  python
+
     INSTALLED_APPS = (
         'grappelli',
         'crop_filebrowser',
@@ -38,9 +40,11 @@ In your url.py import the default CropFileBrowser site:
 from crop_filebrowser.sites import site
 and add the following URL-patterns (before any admin-urls):
 
-urlpatterns = patterns('',
-   url(r'^admin/filebrowser/', include(site.urls)),
-)
+.. code-block::  python
+
+    urlpatterns = patterns('',
+       url(r'^admin/filebrowser/', include(site.urls)),
+    )
 
 Crop versions filter
 --------------------
@@ -88,6 +92,7 @@ A templatetag has been added to easily trigger the original dimensions set in fo
 An exemple might be more helpful!
 
 .. code-block::  html
+
     {% load static thumbnail crop_filebrowser %}
 
     {% version_object_thumbnail news.image 'news_detail' as object_image %}  
