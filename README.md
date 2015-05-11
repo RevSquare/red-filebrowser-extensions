@@ -53,6 +53,7 @@ In order to contectualize the cropping options better you can restrict the list 
 ie:
 
 .. code-block::  python
+
     FILEBROWSER_VERSIONS = {
         'admin_thumbnail': {
             'verbose_name': 'Admin Thumbnail',
