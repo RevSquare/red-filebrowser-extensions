@@ -52,29 +52,32 @@ In order to contectualize the cropping options better you can restrict the list 
 
 ie:
 
-FILEBROWSER_VERSIONS = {
-    'admin_thumbnail': {
-        'verbose_name': 'Admin Thumbnail',
-        'width': 100,
-        'height': 75,
-        'opts': 'crop',
-        'filter_model': ('',)
-    },
-    'article_detail': {
-        'verbose_name': 'Article detail page main image',
-        'width': 600,
-        'height': 400,
-        'opts': 'crop',
-        'filter_model': ('news',),
-        'filter_field': ('image',)
-    },
-}
+.. code-block::  python
+    FILEBROWSER_VERSIONS = {
+        'admin_thumbnail': {
+            'verbose_name': 'Admin Thumbnail',
+            'width': 100,
+            'height': 75,
+            'opts': 'crop',
+            'filter_model': ('',)
+        },
+        'article_detail': {
+            'verbose_name': 'Article detail page main image',
+            'width': 600,
+            'height': 400,
+            'opts': 'crop',
+            'filter_model': ('news',),
+            'filter_field': ('image',)
+        },
+    }
 
 The exemple above will only be triggered if the crop form is opened from a form of a news object in the field named 'image'. 
 
 For inlines, you can use the name of the fields prefixed before the id. On the following exemple, you would use 'news' because the name attribute 'news-0-image' has 'news' before the id / number of the inline: 
 
-<input id="id_news-0-image" class="vFileBrowseField" type="text" value="my-image.jpg" name="news-0-image">
+.. code-block::  html
+
+    <input id="id_news-0-image" class="vFileBrowseField" type="text" value="my-image.jpg" name="news-0-image">
 
 Templatetags
 ------------
@@ -83,12 +86,13 @@ A templatetag has been added to easily trigger the original dimensions set in fo
 
 An exemple might be more helpful!
 
-{% load static thumbnail crop_filebrowser %}
+.. code-block::  html
+    {% load static thumbnail crop_filebrowser %}
 
-{% version_object_thumbnail news.image 'news_detail' as object_image %}  
-{% thumbnail object_image object_image.version_dimensions crop="center" as im %}
-    <img src="{{ im.url }}" alt="{{ news.title }}">
-{% endthumbnail %}
+    {% version_object_thumbnail news.image 'news_detail' as object_image %}  
+    {% thumbnail object_image object_image.version_dimensions crop="center" as im %}
+        <img src="{{ im.url }}" alt="{{ news.title }}">
+    {% endthumbnail %}
 
 This way, the editors dont have to originaly crop all images before they appear at the right dimensions, and you can directly manage them from the settings.
 
