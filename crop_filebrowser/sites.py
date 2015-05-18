@@ -163,7 +163,8 @@ class CropFileBrowserSite(sites.FileBrowserSite):
         else:
             model = request.GET.get('model', '')
             if not model:
-                args = request.META.get('HTTP_REFERER').split('/')
+                main_url = request.META.get('HTTP_REFERER').split('?')[0]
+                args = main_url.split('/')
                 if not args[-1]:
                     del args[-1]
                 if int(args[-1]) > 0:

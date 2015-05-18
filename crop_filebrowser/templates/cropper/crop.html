@@ -130,8 +130,7 @@
                 }
 
                 $("select#version_selector").change(change_version);
-                change_version();
-                $("#original").load(function() {
+                $(window).on('load', function() {
 			        change_version();
                 });
 		    });
