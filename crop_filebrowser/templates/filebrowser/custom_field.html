@@ -9,11 +9,11 @@
         <img id="previewimage_{{ final_attrs.id }}" src="{{ thumbnail_version.url }}" class="preview" />
     </a>
 </p>
-<p>
-    <a href="javascript:FileBrowser.show('{{ final_attrs.id }}', '{% url 'filebrowser:fb_crop' %}?pop=1&amp;dir={{ value.dirname|urlencode }}&amp;filename={{ value.filename|urlencode }}&amp;fieldname={{ final_attrs.name|urlencode }}')" style="font-size: 14px; text-decoration: none;">
-        <strong>{% trans "Crop" %}</strong>
-    </a>
+
+<p class="preview">
+<input type="button" onclick="javascript:FileBrowser.show('{{ final_attrs.id }}', '{% url 'filebrowser:fb_crop' %}?pop=1&amp;dir={{ value.dirname|urlencode }}&amp;filename={{ value.filename|urlencode }}&amp;fieldname={{ final_attrs.name|urlencode }}')" value="{% trans "Crop image" %}" />
 </p>
+
 {% else %}
 <p class="preview" id="preview_{{ final_attrs.id }}" style="display: none;">
     <a href="javascript://" target="_self" id="previewlink_{{ final_attrs.id }}">
