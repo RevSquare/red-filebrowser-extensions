@@ -1,31 +1,27 @@
-import tempfile
-import urllib
-
-from PIL import ImageFile
-
-from django.shortcuts import render_to_response, HttpResponse, Http404
+from django.shortcuts import render_to_response, Http404
 from django.template import RequestContext as Context
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.cache import never_cache
 
 from filebrowser import sites
 from filebrowser.base import FileObject
-from filebrowser import functions
 from filebrowser import settings as fb_settings
 from django.conf import settings
-from filebrowser.utils import path_strip, scale_and_crop
+from filebrowser.utils import path_strip
 
 from forms import ImageCropDataForm
+
 
 class CropFileBrowserSite(sites.FileBrowserSite):
 
     def get_urls(self):
-        from django.conf.urls import patterns, url, include
+        from django.conf.urls import patterns, url
 
         urlpatterns = super(CropFileBrowserSite, self).get_urls()
 
-        urlpatterns += patterns('',
+        urlpatterns += patterns(
+            '',
             url(r'^crop/$', self.filebrowser_view(self.crop), name="fb_crop"),
         )
 
@@ -60,16 +56,18 @@ class CropFileBrowserSite(sites.FileBrowserSite):
             version_path = self.get_version_path(org_path, version)
             root, ext = os.path.splitext(version_path)
             size_args.update({
-                'width' : fb_settings.VERSIONS[version].get('width'),
-                'height' : fb_settings.VERSIONS[version].get('height')
+                'width': fb_settings.VERSIONS[version].get('width'),
+                'height': fb_settings.VERSIONS[version].get('height')
             })
 
             im = self._do_crop(im, **size_args)
             try:
-                im.save(tmpfile, format=Image.EXTENSION[ext], quality=fb_settings.VERSION_QUALITY,
-                            optimize=(ext != '.gif'))
+                im.save(tmpfile, format=Image.EXTENSION[ext],
+                        quality=fb_settings.VERSION_QUALITY,
+                        optimize=(ext != '.gif'))
             except IOError:
-                im.save(tmpfile, format=Image.EXTENSION[ext], quality=fb_settings.VERSION_QUALITY)
+                im.save(tmpfile, format=Image.EXTENSION[ext],
+                        quality=fb_settings.VERSION_QUALITY)
 
             # Remove the old version, if there's any
             if version_path != self.storage.get_available_name(version_path):
@@ -81,16 +79,16 @@ class CropFileBrowserSite(sites.FileBrowserSite):
                 f.close()
             except:
                 pass
+
     def get_version_path(self, value, version_prefix):
         """
         Construct the PATH to an Image version.
-        value has to be a path relative to the location of 
+        value has to be a path relative to the location of
         the site's storage.
-        
+
         version_filename = filename + version_prefix + ext
         Returns a relative path to the location of the site's storage.
         """
-        
         if self.storage.isfile(value):
             path, filename = os.path.split(value)
             relative_path = path_strip(os.path.join(path,''), self.directory)
@@ -153,7 +151,7 @@ class CropFileBrowserSite(sites.FileBrowserSite):
             model = request.POST.get('model', '')
             if form.is_valid():
                 if version in versions:
-                   self._save_crop(fileobject.path, **form.cleaned_data)
+                    self._save_crop(fileobject.path, **form.cleaned_data)
                 qs = request.GET.copy()
                 qs['version'] = version
                 path = '%s?%s' % (request.path, qs.urlencode())
@@ -167,6 +165,7 @@ class CropFileBrowserSite(sites.FileBrowserSite):
                 args = main_url.split('/')
                 if not args[-1]:
                     del args[-1]
+
                 try:
                     last = int(args[-1])
                 except ValueError:
@@ -176,7 +175,7 @@ class CropFileBrowserSite(sites.FileBrowserSite):
                 else:
                     model = args[-1]
             versions = self.filter_versions(request, versions, model)
-            form = ImageCropDataForm(initial={'version' : version})
+            form = ImageCropDataForm(initial={'version': version})
         return render_to_response('cropper/crop.html', {
             'fileobject': fileobject,
             'query': query,
@@ -186,9 +185,9 @@ class CropFileBrowserSite(sites.FileBrowserSite):
             'settings_var': fb_settings,
             'filebrowser_site': self,
             'model': model,
-            'form' : form,
-            'editable_versions' : versions,
-            'version' : version
+            'form': form,
+            'editable_versions': versions,
+            'version': version
         }, context_instance=Context(request, current_app=self.name))
 
 storage = sites.storage
