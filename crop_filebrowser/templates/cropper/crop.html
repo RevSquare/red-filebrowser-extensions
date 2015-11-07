@@ -87,9 +87,9 @@
     {{ block.super }}
 
     <!-- JCrop -->
-    <script language="javascript" type="text/javascript" src="{{ STATIC_URL }}cropper/js/JCrop/jquery.min.js"></script>
-    <script language="javascript" type="text/javascript" src="{{ STATIC_URL }}cropper/js/JCrop/jquery.Jcrop.js"></script>
-    <script language="javascript" type="text/javascript" src="{{ STATIC_URL }}cropper/js/image_crop.js"></script>
+    <script language="javascript" type="text/javascript" src="{% static 'cropper/js/JCrop/jquery.min.js' %}"></script>
+    <script language="javascript" type="text/javascript" src="{% static 'cropper/js/JCrop/jquery.Jcrop.js' %}"></script>
+    <script language="javascript" type="text/javascript" src="{% static 'cropper/js/image_crop.js' %}"></script>
 
     <script language='javascript'>
         var grp = grp ? grp : django;
