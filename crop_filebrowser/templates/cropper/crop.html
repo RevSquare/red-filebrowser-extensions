@@ -7,7 +7,7 @@
 {% block stylesheets %}
     {{ block.super }}
     <!-- JCrop -->
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}cropper/css/JCrop/jquery.Jcrop.css" />
+    <link rel="stylesheet" type="text/css" href="{% static 'cropper/css/JCrop/jquery.Jcrop.css' %}" />
 {% endblock %}
 
 {% block breadcrumbs %}{% include "filebrowser/include/breadcrumbs.html" %}{% endblock %}
