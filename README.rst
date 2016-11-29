@@ -14,9 +14,9 @@ Crop FileBrowser is an extension to FileBrowser <https://github.com/sehmaschine/
 Requirements
 ------------
 
-* FileBrowser 3.4.3
-* Django 1.3 (http://www.djangoproject.com)
-* Grappelli 2.3.7 (https://github.com/sehmaschine/django-grappelli)
+* FileBrowser 3.7.*
+* Django 1.10 (http://www.djangoproject.com)
+* Grappelli 2.9.* (https://github.com/sehmaschine/django-grappelli)
 * PIL (http://www.pythonware.com/products/pil/)
 
 Installation
