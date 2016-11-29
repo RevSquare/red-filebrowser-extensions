@@ -1,8 +1,8 @@
 {% load i18n fb_versions fb_tags %}
 
-<input id="{{ final_attrs.id }}" type="text" class="vFileBrowseField{% if final_attrs.class %} {{ final_attrs.class }}{% endif %}" name="{{ final_attrs.name }}" value="{{ value.path }}" /><a href="javascript:FileBrowser.show('{{ final_attrs.id }}', '{{ url }}?pop=1{% if final_attrs.directory %}&amp;dir={{ final_attrs.directory|urlencode|urlencode }}{% endif %}{% if final_attrs.format %}&amp;type={{ final_attrs.format }}{% endif %}');" class="fb_show"></a>
+<input id="{{ final_attrs.id }}" type="text" class="vFileBrowseField{% if final_attrs.class %} {{ final_attrs.class }}{% endif %}" name="{{ final_attrs.name }}" value="{{ value.path }}" {% for k, v in final_attrs.data_attrs.items %}{{k}}="{{v}}" {% endfor %}/><a href="javascript:FileBrowser.show('{{ final_attrs.id }}', '{{ url }}?pop=1{% if final_attrs.directory %}&amp;dir={{ final_attrs.directory|urlencode|urlencode }}{% endif %}{% if final_attrs.format %}&amp;filter_type={{ final_attrs.format }}{% endif %}');" class="fb_show"></a>
 {% if value.filetype == "Image" and value.exists %}
-{% version_object value.path final_attrs.ADMIN_THUMBNAIL as thumbnail_version %}
+{% version value.path final_attrs.ADMIN_THUMBNAIL as thumbnail_version %}
 {% if thumbnail_version %}
 <p class="preview" id="preview_{{ final_attrs.id }}">
     <a href="{{ value.url }}" target="_blank" id="previewlink_{{ final_attrs.id }}">
@@ -11,7 +11,8 @@
 </p>
 
 <p class="preview">
-<input type="button" onclick="javascript:FileBrowser.show('{{ final_attrs.id }}', '{% url 'filebrowser:fb_crop' %}?pop=1&amp;dir={{ value.dirname|urlencode }}&amp;filename={{ value.filename|urlencode }}&amp;fieldname={{ final_attrs.name|urlencode }}')" value="{% trans "Crop image" %}" />
+<input type="button" onclick="javascript:FileBrowser.show('{{ final_attrs.id }}', '{% url 'filebrowser:fb_crop' %}?pop=1&amp;dir={{ value.dirname|urlencode }}&amp;filename={{ value.filename|urlencode }}&amp;fieldname={{ final_attrs.name|urlencode }}')" value="{% trans "Crop image" %}" /> &nbsp;
+<input type="button" onclick="javascript:FileBrowser.show('{{ final_attrs.id }}', '{% url 'filebrowser:fb_list_versions' %}?pop=1&amp;dir={{ value.dirname|urlencode }}&amp;filename={{ value.filename|urlencode }}&amp;fieldname={{ final_attrs.name|urlencode }}')" value="{% trans "View versions" %}" />
 </p>
 
 {% else %}

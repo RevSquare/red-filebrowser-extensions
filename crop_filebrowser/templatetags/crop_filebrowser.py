@@ -1,12 +1,12 @@
 from django.template import Library, TemplateSyntaxError
 
-from filebrowser.templatetags.fb_versions import VersionObjectNode
+from filebrowser.templatetags.fb_versions import VersionNode
 from filebrowser.settings import VERSIONS
 
 register = Library()
 
 
-class VersionObjectThumbnailNode(VersionObjectNode):
+class VersionObjectThumbnailNode(VersionNode):
     def render(self, context):
         result = super(VersionObjectThumbnailNode, self).render(context)
         if not context[self.var_name]:

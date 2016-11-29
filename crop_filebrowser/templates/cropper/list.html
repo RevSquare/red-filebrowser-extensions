@@ -1,0 +1,70 @@
+{% extends "admin/base_site.html" %}
+
+<!-- LOADING -->
+{% load admin_static i18n fb_tags fb_versions %}
+
+<!-- STYLESHEETS -->
+{% block stylesheets %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "filebrowser/css/filebrowser.css" %}" />
+{% endblock %}
+
+<!-- JAVASCRIPTS -->
+{% block javascripts %}
+    {{ block.super }}
+    <script language="javascript" type="text/javascript" src="{% static "filebrowser/js/AddFileBrowser.js" %}"></script>
+    <script type="text/javascript">
+    (function($){
+        $(document).ready(function() {
+            $("div#grp-content-container .grp-collapse").grp_collapsible({
+                on_init: function(elem, options) {
+                    // open collapse (and all collapse parents) in case of errors
+                    if (elem.find("ul.grp-errorlist").length > 0) {
+                        elem.removeClass("grp-closed")
+                            .addClass("grp-open");
+                        elem.parents(".grp-collapse")
+                            .removeClass("grp-closed")
+                            .addClass("grp-open");
+                    }
+                }
+            });
+            // remove edit module if no actions are given
+            if ($("select#id_custom_action").find("option").length <= 1) {
+                $("fieldset#fieldset_edit").hide();
+            }
+        });
+    })(grp.jQuery);
+    </script>
+    {{ media }}
+{% endblock %}
+
+<!-- COLTYPE/BODYCLASS -->
+{% block bodyclass %}grp-change-form grp-filebrowser{% if query.pop %} grp-popup{% endif %}{% endblock %}
+{% block content-class %}{% endblock %}
+
+<!-- BREADCRBUMBS -->
+{% block breadcrumbs %}{% include "filebrowser/include/breadcrumbs.html" %}{% endblock %}
+
+<!-- CONTENT -->
+{% block content %}
+<div id="grp-content-container">
+    <h1>{{ fileobject.filename }}</h1>
+    <fieldset class="grp-module grp-collapse grp-open">
+    {% for version in versions %}
+        {% version fileobject version as image_version %}
+        {% version_setting version %}
+        <div class="grp-row">
+            <div class="l-2c-fluid l-d-4">
+                <div class="c-1">
+                    <label>{{ version_setting.verbose_name }}</label><br>
+                    <input type="button" onclick="javascript:FileBrowser.show('{{ id }}', '{% url 'filebrowser:fb_crop' %}{% query_string "" "p" %}&amp;filename={{ fileobject.filename|urlencode }}&amp;version={{ version }}')" value="{% trans "Crop" %}" />
+                </div>
+                <div class="c-2">
+                    <img src="{{ image_version.url }}" />
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </fieldset>
+</div>
+{% endblock %}

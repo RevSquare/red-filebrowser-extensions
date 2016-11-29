@@ -1,7 +1,7 @@
 {% extends "filebrowser/version.html" %}
 
 <!-- LOADING -->
-{% load i18n admin_static fb_tags fb_versions %}
+{% load i18n static fb_tags fb_versions %}
 
 <!-- STYLESHEETS -->
 {% block stylesheets %}
@@ -98,7 +98,7 @@
                 var versions = {
                     {% for version in editable_versions %}
                         '{{ version }}' : {
-                            {% version_object fileobject version as image_version %}
+                            {% version fileobject version as image_version %}
                             {% version_setting version %}
                             'name' : '{{ version_setting.verbose_name }}',
                             'width' : {% if version_setting.width %}'{{ version_setting.width }}'{% else %}null{% endif %},

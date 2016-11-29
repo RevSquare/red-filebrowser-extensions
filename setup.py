@@ -2,10 +2,10 @@ from setuptools import setup, find_packages
 
 setup(
     name='red-filebrowser-extensions',
-    version='0.1',
+    version='0.2',
     description='Django filebrowser extensions.',
-    author='RED Interactive (opensource@ff0000.com)',
-    author_email='opensource@ff0000.com',
+    author='Guillaume Pousseo',
+    author_email='guillaumepousseo@revsquare.com',
     url='',
     download_url='',
     packages=find_packages(),
